@@ -88,7 +88,6 @@ def getNestedList(root):
 
 
 def print_bst(node):
-
     nested_list, left_most_pos = getNestedList(node)
 
     for llnode in nested_list:
@@ -97,6 +96,48 @@ def print_bst(node):
         while node:
             print("{} {}".format(node.val, node.pos))
             node = node.next
+
+val_to_whiteSpaces = {}
+def print_bst(node):
+    helper(node)
+
+    helper2(node)
+
+def helper2(node):
+
+    q = queue.Queue()
+    curr_level = 0
+    q.put((node,0))
+    tmp_str = ""
+    while not q.empty():
+        n, level = q.get()
+
+        left_white_spaces = val_to_whiteSpaces[n.val][0]
+        right_white_spaces = val_to_whiteSpaces[n.val][1]
+
+        if level != curr_level:
+            tmp_str += "\n"
+            curr_level = level
+
+        tmp_str += " "*left_white_spaces + str(node.val) + " "*(right_white_spaces+1)
+
+        if n.left:
+            q.put((n.left, level + 1))
+        if n.right:
+            q.put((n.right, level + 1))
+
+
+
+
+def helper(node):
+    if not node:
+        return 0
+
+    left_spaces = helper(node.left)
+    right_spaces = helper(node.right)
+    val_to_whiteSpaces[node.val] = (left_spaces, right_spaces)
+
+    return  left_spaces + 1 + right_spaces
 
 
 def distanceBtwnNodes(root, n1, n2):
@@ -146,7 +187,7 @@ def distanceBtwnNodes(root, n1, n2):
 inp = [5, 3, 2, 4, 8, 6]
 
 root = bst(inp)
-# print_bst(root)
+print_bst(root)
 
 n1 = 8
 n2 = 2
